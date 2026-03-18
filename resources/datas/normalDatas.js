@@ -26,17 +26,9 @@ const bookmarks = {
     {
       text: "SegmentFault",
       url: "https://segmentfault.com/"
-    },
-    {
-      text: "文心一言",
-      url: "https://yiyan.baidu.com/"
     }
   ],
   tools: [
-    {
-      text: "IP地址查询",
-      url: "https://zh-hans.ipshu.com/"
-    },
     {
       text: "图片转文字",
       url: "https://web.baimiaoapp.com/"

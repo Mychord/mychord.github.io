@@ -18,20 +18,25 @@ deleteButton.addEventListener("mousedown", (event) => {
   // 阻止浏览器默认事件, 使点击时输入框不会失去焦点
   event.preventDefault();
 });
-deleteButton.addEventListener("click", (event) => {
+deleteButton.addEventListener("click", () => {
+  // 手动触发 searchText 的 input 事件
   searchText.value = "";
+  const event = new Event("input", { bubbles: true });
+  searchText.dispatchEvent(event);
 });
 
 searchButton.addEventListener("click", () => openNewTab());
 
-searchText.addEventListener("input", debounce(getSearchSuggestions, 400));
+searchText.addEventListener("input", (event) => {
+  debounce(getSearchSuggestions(event), 400);
+  if (searchText.value == "") deleteButton.classList.remove("show");
+  else deleteButton.classList.add("show");
+});
 searchText.addEventListener("blur", () => {
-  deleteButton.classList.remove("show");
   searchInput.classList.remove("extend");
   suggestionContainer.classList.remove("show");
 });
 searchText.addEventListener("focus", (event) => {
-  deleteButton.classList.add("show");
   getSearchSuggestions(event);
 });
 searchText.addEventListener("keydown", (event) => {
@@ -124,6 +129,7 @@ window.updateSearchSuggestions = function (data) {
     suggestionContainer.classList.remove("show");
     return;
   }
+  // 搜索有结果
   suggestions = data.AS.Results.reduce((res, item) => {
     const arr = item.Suggests.map((val) => val.Txt);
     return res.concat(arr);
